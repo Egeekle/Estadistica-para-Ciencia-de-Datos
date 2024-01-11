@@ -14,24 +14,29 @@ library(matrixStats)
 
 # Import the datasets needed for chapter 1
 
-PSDS_PATH <- file.path(dirname(dirname(getwd())))
- 
-state <- read.csv(file.path(PSDS_PATH, 'data', 'state.csv'))
-dfw <- read.csv(file.path(PSDS_PATH, 'data', 'dfw_airline.csv'))
-sp500_px <- read.csv(file.path(PSDS_PATH, 'data', 'sp500_data.csv.gz'), row.names=1)
-sp500_sym <- read.csv(file.path(PSDS_PATH, 'data', 'sp500_sectors.csv'), stringsAsFactors = FALSE)
-kc_tax <- read.csv(file.path(PSDS_PATH, 'data', 'kc_tax.csv.gz'))
-lc_loans <- read.csv(file.path(PSDS_PATH, 'data', 'lc_loans.csv'))
-airline_stats <- read.csv(file.path(PSDS_PATH, 'data', 'airline_stats.csv'), stringsAsFactors = FALSE)
-airline_stats$airline <- ordered(airline_stats$airline, 
-                                 levels=c('Alaska', 'American', 'Jet Blue', 'Delta', 'United', 'Southwest'))
+PSDS_PATH <- "E:/Estadistica-para-Ciencia-de-Datos"
+
+state <- read.csv(file.path(PSDS_PATH,"data","state.csv")) # nolint
+dfw <- read.csv(file.path(PSDS_PATH, "data", "dfw_airline.csv"))
+sp500_px <- read.csv(file.path(PSDS_PATH,"data", "sp500_data.csv.gz")
+                      ,  row.names = 1)
+sp500_sym <- read.csv(file.path(PSDS_PATH, "data", "sp500_sectors.csv")
+                      , stringsAsFactors = FALSE)
+kc_tax <- read.csv(file.path(PSDS_PATH, "data", "kc_tax.csv.gz"))
+lc_loans <- read.csv(file.path(PSDS_PATH, "data", "lc_loans.csv"))
+airline_stats <- read.csv(file.path(PSDS_PATH, "data", "airline_stats.csv")
+                      , stringsAsFactors = FALSE)
+airline_stats$airline <- ordered(airline_stats$airline
+                                 , levels = c("Alaska" , "American" , "Jet Blue" , "Delta" , "United" , "Southwest"))
+
 
 ## Estimates of Location
 ### Example: Location Estimates of Population and Murder Rates
 
 # Table 1-2
 state_asc <- state
-state_asc[['Population']] <- formatC(state_asc[['Population']], format='d', digits=0, big.mark=',')
+state_asc[["Population"]] <- formatC(state_asc[["Population"]]
+                          , format="d", digits=0, big.mark=",")  
 state_asc[1:8,]
 
 mean(state[['Population']])
@@ -137,26 +142,26 @@ x_tab <- CrossTable(lc_loans$grade, lc_loans$status,
 # Boxplots of a column can be grouped by a different column.
 
 boxplot(pct_carrier_delay ~ airline, data=airline_stats, ylim=c(0, 50), 
-        cex.axis=.6, ylab='Daily % of Delayed Flights')
+        cex.axis=.6, ylab="Daily % of Delayed Flights")
 
 # Variation of boxplots called _violinplot_.
 
 graph <- ggplot(data=airline_stats, aes(airline, pct_carrier_delay)) + 
-  geom_violin(draw_quantiles = c(.25,.5,.75), linetype=2) +
-  geom_violin(fill=NA, size=1.1) +
-  coord_cartesian(ylim=c(0, 50)) +
-  labs(x='', y='Daily % of Delayed Flights') +
+  geom_violin(draw_quantiles = c(.25, .5, .75), linetype = 2) +
+  geom_violin(fill = NA, size = 1.1) +
+  coord_cartesian(ylim = c(0, 50)) +
+  labs(x = "" , y = "Daily % of Delayed Flights") +
   theme_bw()
 graph
 
 ### Visualizing Multiple Variables
 
 graph <- ggplot(subset(kc_tax0, ZipCode %in% c(98188, 98105, 98108, 98126)),
-                aes(x=SqFtTotLiving, y=TaxAssessedValue)) + 
-  stat_binhex(colour='white') + 
+                aes(x = SqFtTotLiving, y = TaxAssessedValue)) + 
+  stat_binhex(colour = "white") + 
   theme_bw() + 
-  scale_fill_gradient(low='gray95', high='black') +
+  scale_fill_gradient(low="gray95", high = "black") +
   scale_y_continuous(labels = function(x) format(x, scientific = FALSE)) +
-  labs(x='Finished Square Feet', y='Tax-Assessed Value') +
-  facet_wrap('ZipCode')
+  labs(x="Finished Square Feet", y = "Tax-Assessed Value") +
+  facet_wrap("ZipCode")
 graph
